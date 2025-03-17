@@ -18,6 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.bank_project.model.Account;
 import br.com.fiap.bank_project.model.StatusConta;
+//import br.com.fiap.bank_project.model.DepositRequest;
+
+
+
 
 @RestController
 @RequestMapping("/account")
@@ -89,5 +93,24 @@ public class ControllerBank {
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    // Endpoint para realizar depósito
+    /**
+     * @param depositRequest
+     * @return
+     */
+    // @PostMapping("/deposit")
+    // public ResponseEntity<Account> deposit(@RequestBody DepositRequest depositRequest) {
+    //     log.info("Realizando depósito: " + depositRequest);
+        
+    //     if (depositRequest.getValue() <= 0) {
+    //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor do depósito deve ser maior que zero");
+    //     }
+        
+    //     Account account = getAccount(depositRequest.getAccountId());
+        
+    //     if (account.getStatusConta() == StatusConta.INATIVA) {
+    //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível depositar em uma conta inativa");
+    //     }
 
 }

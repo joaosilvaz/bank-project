@@ -105,6 +105,7 @@ public class Account {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+    
 
     // Validation
     public void validate() {

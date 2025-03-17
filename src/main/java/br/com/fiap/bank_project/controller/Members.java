@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class Members {
     
-
     @GetMapping()
     public String index(){
         return """

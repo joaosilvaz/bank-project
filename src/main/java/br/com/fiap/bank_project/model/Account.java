@@ -6,31 +6,42 @@ import java.util.Random;
 public class Account {
 
     // Atributes
-
+    private Long id;
     private Long numero;
     private int agencia;
     private String nomeTitular;
     private String cpf;
     private LocalDate dataAbertura;
     private double saldoInicial;
-    private boolean ativa;
+    private StatusConta statusConta;
     private String tipo;
 
     // Constructor
-    public Account(Long numero, int agencia, String nomeTitular, String cpf, LocalDate dataAbertura, double saldoInicial,
-            boolean ativa, String tipo) {
-        this.numero = (numero == null) ? new Random().nextLong() : numero;
+    public Account(Long id, Long numero, int agencia, String nomeTitular, String cpf, LocalDate dataAbertura,
+            double saldoInicial, StatusConta statusConta, String tipo) {
+        this.id = (id == null) ? Math.abs(new Random().nextLong()) : id;
+        this.numero = numero;
         this.agencia = agencia;
         this.nomeTitular = nomeTitular;
         this.cpf = cpf;
         this.dataAbertura = dataAbertura;
         this.saldoInicial = saldoInicial;
-        this.ativa = ativa;
+        this.statusConta = statusConta;
         this.tipo = tipo;
     }
 
+    public Account() {
+    }
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getNumero() {
         return numero;
     }
@@ -79,12 +90,12 @@ public class Account {
         this.saldoInicial = saldoInicial;
     }
 
-    public boolean isAtiva() {
-        return ativa;
+    public StatusConta getStatusConta() {
+        return statusConta;
     }
 
-    public void setAtiva(boolean ativa) {
-        this.ativa = ativa;
+    public void setStatusConta(StatusConta statusConta) {
+        this.statusConta = statusConta;
     }
 
     public String getTipo() {
@@ -96,7 +107,7 @@ public class Account {
     }
 
     // Validation
-    public void validar() {
+    public void validate() {
         if (nomeTitular == null || nomeTitular.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do titular é obrigatório.");
         }
@@ -109,5 +120,7 @@ public class Account {
         if (saldoInicial < 0) {
             throw new IllegalArgumentException("Saldo inicial não pode ser negativo.");
         }
+
     }
+
 }

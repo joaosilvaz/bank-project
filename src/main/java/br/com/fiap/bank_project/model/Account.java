@@ -106,6 +106,7 @@ public class Account {
         this.tipo = tipo;
     }
     
+    
 
     // Validation
     public void validate() {

@@ -16,16 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.bank_project.dto.Transacao;
 import br.com.fiap.bank_project.model.Account;
 import br.com.fiap.bank_project.model.StatusConta;
-//import br.com.fiap.bank_project.model.DepositRequest;
-
-
-
 
 @RestController
 @RequestMapping("/account")
-
 public class ControllerBank {
     private Logger log = LoggerFactory.getLogger(getClass());
     private List<Account> accounts = new ArrayList<>();
@@ -99,18 +95,26 @@ public class ControllerBank {
      * @param depositRequest
      * @return
      */
-    // @PostMapping("/deposit")
-    // public ResponseEntity<Account> deposit(@RequestBody DepositRequest depositRequest) {
-    //     log.info("Realizando depósito: " + depositRequest);
+    @PostMapping("/deposit")
+    public ResponseEntity<Account> deposit(@RequestBody Transacao depositRequest) {
+        log.info("Realizando depósito: " + depositRequest);
         
-    //     if (depositRequest.getValue() <= 0) {
-    //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor do depósito deve ser maior que zero");
-    //     }
+        if (depositRequest.value() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor do depósito deve ser maior que zero");
+        }
         
-    //     Account account = getAccount(depositRequest.getAccountId());
+        var contaDestino = getById(depositRequest.origen());
         
-    //     if (account.getStatusConta() == StatusConta.INATIVA) {
-    //         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível depositar em uma conta inativa");
-    //     }
-
+        if (.getStatusConta() == StatusConta.INATIVA) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível depositar em uma conta inativa");
+        }
+        
+        // Atualiza o saldo da conta
+        double newBalance = account.getSaldo() + depositRequest.getValue();
+        account.setSaldo(newBalance);
+        
+        log.info("Depósito realizado com sucesso. Novo saldo: " + newBalance);
+        
+        return ResponseEntity.ok(account);
+    }
 }

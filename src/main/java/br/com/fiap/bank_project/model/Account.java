@@ -125,4 +125,23 @@ public class Account {
 
     }
 
+
+
+    // saque
+    public void withdraw(double value){
+        if (value < 0 ){
+            throw new IllegalArgumentException("Valor de saque não pode ser negativo.");
+        }
+        saldoInicial += value;
+    }
+
+    // deposito
+    public void deposit(double value){
+        if (value < 0 ){
+            throw new IllegalArgumentException("Valor de deposito não pode ser negativo.");
+        }
+        saldoInicial += value;
+    }
+
+
 }

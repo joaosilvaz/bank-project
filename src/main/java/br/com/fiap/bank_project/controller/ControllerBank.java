@@ -95,26 +95,26 @@ public class ControllerBank {
      * @param depositRequest
      * @return
      */
-    @PostMapping("/deposit")
+    @PutMapping("/deposit")
     public ResponseEntity<Account> deposit(@RequestBody Transacao depositRequest) {
         log.info("Realizando depósito: " + depositRequest);
-        
-        if (depositRequest.value() <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O valor do depósito deve ser maior que zero");
-        }
-        
+
         var contaDestino = getById(depositRequest.origen());
         
-        if (.getStatusConta() == StatusConta.INATIVA) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível depositar em uma conta inativa");
-        }
+        contaDestino.deposit(depositRequest.value());
         
-        // Atualiza o saldo da conta
-        double newBalance = account.getSaldo() + depositRequest.getValue();
-        account.setSaldo(newBalance);
+    return ResponseEntity.status(200).body(contaDestino);
+    
+    }
+    @PutMapping("/withdraw")
+    public ResponseEntity<Account> withdraw(@RequestBody Transacao withdrawRequest) {
+        log.info("Realizando saque: " + withdrawRequest);
+
+        var contaOrigem = getById(withdrawRequest.destin());
         
-        log.info("Depósito realizado com sucesso. Novo saldo: " + newBalance);
+        contaOrigem.withdraw(withdrawRequest.value());
         
-        return ResponseEntity.ok(account);
+    return ResponseEntity.status(200).body(contaOrigem);
+
     }
 }

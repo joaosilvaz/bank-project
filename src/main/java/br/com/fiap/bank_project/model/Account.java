@@ -142,6 +142,9 @@ public class Account {
         }
         saldoInicial += value;
     }
+    public void pix(){
+        
+    }
 
 
 }

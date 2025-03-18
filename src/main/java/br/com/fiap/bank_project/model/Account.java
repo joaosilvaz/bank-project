@@ -132,7 +132,7 @@ public class Account {
         if (value < 0 ){
             throw new IllegalArgumentException("Valor de saque não pode ser negativo.");
         }
-        saldoInicial += value;
+        saldoInicial -= value;
     }
 
     // deposito

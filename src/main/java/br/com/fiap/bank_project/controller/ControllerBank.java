@@ -99,20 +99,21 @@ public class ControllerBank {
     public ResponseEntity<Account> deposit(@RequestBody Transacao depositRequest) {
         log.info("Realizando depósito: " + depositRequest);
 
-        var contaDestino = getById(depositRequest.origen());
+        var contaDestino = getById(depositRequest.destino());
         
-        contaDestino.deposit(depositRequest.value());
+        contaDestino.deposit(depositRequest.valor());
         
     return ResponseEntity.status(200).body(contaDestino);
     
     }
+
     @PutMapping("/withdraw")
     public ResponseEntity<Account> withdraw(@RequestBody Transacao withdrawRequest) {
         log.info("Realizando saque: " + withdrawRequest);
 
-        var contaOrigem = getById(withdrawRequest.destin());
+        var contaOrigem = getById(withdrawRequest.origem());
         
-        contaOrigem.withdraw(withdrawRequest.value());
+        contaOrigem.withdraw(withdrawRequest.valor());
         
     return ResponseEntity.status(200).body(contaOrigem);
 

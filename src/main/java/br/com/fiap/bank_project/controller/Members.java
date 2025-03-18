@@ -13,7 +13,7 @@ public class Members {
         return """
                 Nome do Projeto: Bank System
                 Integrantes:
-                João Vitor da Silva - RM554694
+                João Vitor da Silva Nascimento - RM554694
                 Fernando Henrique Vilela Aguiar - RM557525
                 """;
     }

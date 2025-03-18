@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.bank_project.dto.Transacao;
 import br.com.fiap.bank_project.model.Account;
-import br.com.fiap.bank_project.model.StatusConta;
+import br.com.fiap.bank_project.model.AccountStatus;
 
 @RestController
 @RequestMapping("/account")
@@ -32,7 +32,7 @@ public class ControllerBank {
         return accounts;
     }
 
-    // Cadastro POST
+    // POST
     @PostMapping()
     public ResponseEntity<?> create(@RequestBody Account account) {
         System.out.println("Cadastrando..." + account.getNomeTitular());
@@ -44,9 +44,10 @@ public class ControllerBank {
         }
     }
 
+    // PUT
     @PutMapping("/{id}")
     public ResponseEntity<Account> closeAccount(@PathVariable Long id) {
-        Account account = getAccount(id); // Supondo que esse método já esteja implementado
+        Account account = getAccount(id);
 
         if (account == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -54,19 +55,19 @@ public class ControllerBank {
 
         log.info("Encerrando conta " + id + " " + account);
 
-        account.setStatusConta(StatusConta.INATIVA); // Define como INATIVA
+        account.setAtiva(AccountStatus.INATIVA);
 
         return ResponseEntity.ok(account);
     }
 
-    // Buscar conta por ID
+    // Get account by ID
     @GetMapping("/{id}")
     public Account getById(@PathVariable Long id) {
         log.info("Buscando conta por ID" + id);
         return getAccount(id);
     }
 
-    // Buscar conta por CPF
+    // Get account by CPF
     @GetMapping("/cpf/{cpf}")
     public Account getByCpf(@PathVariable String cpf) {
         log.info("Buscando conta por CPF " + cpf);
@@ -90,32 +91,46 @@ public class ControllerBank {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    // Endpoint para realizar depósito
-    /**
-     * @param depositRequest
-     * @return
-     */
+    // Deposit
     @PutMapping("/deposit")
     public ResponseEntity<Account> deposit(@RequestBody Transacao depositRequest) {
         log.info("Realizando depósito: " + depositRequest);
 
         var contaDestino = getById(depositRequest.destino());
-        
+
         contaDestino.deposit(depositRequest.valor());
-        
-    return ResponseEntity.status(200).body(contaDestino);
-    
+
+        return ResponseEntity.status(200).body(contaDestino);
+
     }
 
+    // Withdraw
     @PutMapping("/withdraw")
     public ResponseEntity<Account> withdraw(@RequestBody Transacao withdrawRequest) {
         log.info("Realizando saque: " + withdrawRequest);
 
         var contaOrigem = getById(withdrawRequest.origem());
-        
-        contaOrigem.withdraw(withdrawRequest.valor());
-        
-    return ResponseEntity.status(200).body(contaOrigem);
 
+        contaOrigem.withdraw(withdrawRequest.valor());
+
+        return ResponseEntity.status(200).body(contaOrigem);
+
+    }
+
+    // Pix
+    @PutMapping("/pix")
+    public ResponseEntity<?> createPix(@RequestBody Transacao dto) {
+        log.info("Fazendo Pix da conta " + dto.origem() + " para a conta " + dto.destino());
+
+        var contaOrigem = getAccount(dto.origem());
+        var contaDestino = getAccount(dto.destino());
+        try {
+            contaOrigem.withdraw(dto.valor());
+            contaDestino.deposit(dto.valor());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e);
+        }
+
+        return ResponseEntity.status(200).body(contaOrigem);
     }
 }
